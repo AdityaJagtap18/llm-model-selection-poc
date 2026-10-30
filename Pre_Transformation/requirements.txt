@@ -1,0 +1,11 @@
+# Core lab runs with NO third-party packages in mock mode.
+# Standard library only. If `python3 run_lab.py` works, you are ready.
+# (.env is read by run_lab.py itself — python-dotenv is deliberately NOT a dependency.)
+
+# LIVE mode — Azure OpenAI v1 API.
+# Verified against Microsoft Learn "Azure OpenAI SDK language support",
+# updated 2026-07-20, which tested openai 2.46.0 with azure-identity 1.25.3.
+openai>=1.106.0            # 1.106.0 is the floor for passing an Entra token
+                           # provider as api_key. Below it, keyless silently
+                           # sends the callable's repr as a bearer token.
+azure-identity>=1.17.0     # keyless auth — only needed for DS_AUTH_MODE=keyless

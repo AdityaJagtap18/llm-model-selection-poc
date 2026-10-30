@@ -1,0 +1,41 @@
+{
+  "mode": "mock",
+  "mock_latency_ms": 1200,
+
+  "_comment_models": "Deployment names live HERE, never in code. Swapping a model is a config change plus a re-test, not a code change.",
+  "_comment_live": "In LIVE mode 'deployment' must match a deployment name on YOUR Azure OpenAI resource exactly (az cognitiveservices account deployment list). A wrong name is a 404, not a 400. The mock names below are placeholders for offline mode.",
+  "models": {
+    "small_model": {
+      "deployment": "gpt-4o-mini-bulk",
+      "live_deployment": "gpt-4.1-mini",
+      "mock_latency_ms": 900,
+      "price": { "in_per_1k": 0.00015, "out_per_1k": 0.0006 }
+    },
+    "large_model": {
+      "deployment": "claude-reasoning",
+      "live_deployment": "gpt-4.1",
+      "mock_latency_ms": 2600,
+      "price": { "in_per_1k": 0.003, "out_per_1k": 0.015 }
+    }
+  },
+
+  "_comment_weights": "SET THESE BEFORE YOU RUN ANYTHING. They must sum to 1.0. Derive them from your client's constraints, not from the results.",
+  "_comment_weight_rationale": {
+    "schema_fidelity": "20% - downstream handlers parse this as structured data; a malformed response breaks the pipeline before a human ever sees it.",
+    "extraction_accuracy": "20% - core task correctness; this is the thing claims handlers are trusting the model to get right.",
+    "grounding_citation": "20% - a claims decision without a traceable page citation can't be audited or defended to a regulator.",
+    "refusal_behaviour": "20% - regulated insurer workload: a fabricated liability admission or an obeyed injection is a silent, high-consequence failure that nothing else catches. Weighted equal to the other quality dimensions deliberately, per the lab's own guidance that this is the weight worth arguing hardest about.",
+    "cost_per_case": "15% - material at production volume, but subordinate to correctness and safety for a regulated workload; would be higher for a high-volume, low-consequence internal task.",
+    "latency_p95": "5% - this is an async back-office assessment flow, not a live chat interface, so latency is the least client-facing constraint."
+  },
+  "weights": {
+    "schema_fidelity": 0.20,
+    "extraction_accuracy": 0.20,
+    "grounding_citation": 0.20,
+    "refusal_behaviour": 0.20,
+    "cost_per_case": 0.15,
+    "latency_p95": 0.05
+  },
+
+  "_comment_prices": "Illustrative only. Look up current pricing for your region and deployment type before quoting anything to a client."
+}
